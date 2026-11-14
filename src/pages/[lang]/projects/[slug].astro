@@ -33,7 +33,8 @@ const path = `/projects/${slug}/`;
 const canonical = new URL(localizedPath(lang, path), siteConfig.url).href;
 const absImg = async (src: ImageMetadata) => new URL((await getImage({ src, format: 'jpeg', width: 1600 })).src, siteConfig.url).href;
 const images = [await absImg(d.cover), ...(await Promise.all(d.gallery.map((g) => absImg(g.src))))];
-const heading = `${d.title}, ${d.location}`;
+const sep = lang === 'ar' ? '، ' : ', ';
+const heading = `${d.title}${sep}${d.location}`;
 const crumbs = [
   { name: t(lang, 'nav.home'), path: '/' },
   { name: t(lang, 'nav.projects'), path: '/projects/' },
@@ -47,7 +48,7 @@ const num = (n: number) => new Intl.NumberFormat(lang === 'ar' ? 'ar-KW-u-nu-lat
     <Breadcrumbs lang={lang} items={crumbs} />
     <header class="page-head">
       <p class="eyebrow">{t(lang, `projects.type.${d.type}`)}</p>
-      <h1><Ph when={d.placeholder}>{d.title}</Ph><span class="loc">, {d.location}</span></h1>
+      <h1><Ph when={d.placeholder}>{d.title}</Ph><span class="loc">{sep}{d.location}</span></h1>
       <LastUpdated lang={lang} date={d.updated} />
     </header>
 

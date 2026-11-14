@@ -17,12 +17,13 @@ export const siteConfig = {
     ar: { street: '[الشارع، القطعة، المبنى]', locality: 'مدينة الكويت', country: 'الكويت' },
   },
   geo: { lat: 29.3759, lng: 47.9774 },
+  /** Google Maps link to the office pin (placeholder field 'map'). */
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Kuwait+City',
   hours: { days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '09:00', closes: '17:00' },
   instagram: 'https://www.instagram.com/rvl.arch/',
   sameAs: ['https://www.instagram.com/rvl.arch/'],
   /** Field names still awaiting the owner's confirmation. */
-  placeholders: ['phone', 'whatsapp', 'email', 'address', 'geo', 'hours'] as string[],
+  placeholders: ['phone', 'whatsapp', 'email', 'address', 'geo', 'map', 'hours'] as string[],
   /** Set true once a native Arabic reader has approved all Arabic copy. */
   arabicApproved: false,
   deployEnv: (env === 'production' ? 'production' : 'preview') as DeployEnv,

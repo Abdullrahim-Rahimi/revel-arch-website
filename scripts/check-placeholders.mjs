@@ -16,12 +16,25 @@ const files = readdirSync(dir, { recursive: true }).map(String).filter((f) => f.
 const byPage = new Map();
 const names = new Map();
 
+// Backstop: leftover values that carry no marker (dummy numbers, owner tokens like [YEAR]).
+const SENTINELS = [
+  /0000\s?0000|96500000000/g,
+  /\[(?:YEAR|NUMBER|NEED|SOLUTION|RESULT|DEGREE|UNIVERSITY|LICENCE NUMBER|AUTHORITY|Owner[^\]<]*|Placeholder[^\]<]*|MEMBERSHIPS[^\]<]*|Street[^\]<]*)\]/g,
+  /\[(?:[^\]<]*(?:يضيف|يؤكد|مؤقت)[^\]<]*|السنة|عدد|الاحتياج|الحل|النتيجة|الشهادة|الجامعة|رقم الترخيص|الجهة|الشارع[^\]<]*)\]/g,
+];
+
 for (const f of files) {
   const html = readFileSync(join(dir, f), 'utf8');
+  const found = SENTINELS.flatMap((re) => html.match(re) ?? []);
+  if (found.length) {
+    const page = '/' + relative(dir, join(dir, f)).split(sep).join('/').replace(/index\.html$/, '');
+    byPage.set(page, (byPage.get(page) ?? 0) + found.length);
+    for (const s of new Set(found)) names.set(`sentinel ${s.slice(0, 40)}`, (names.get(`sentinel ${s.slice(0, 40)}`) ?? 0) + 1);
+  }
   const matches = [...html.matchAll(/data-placeholder(?:="([^"]*)")?/g)];
   if (!matches.length) continue;
   const page = '/' + relative(dir, join(dir, f)).split(sep).join('/').replace(/index\.html$/, '');
-  byPage.set(page, matches.length);
+  byPage.set(page, (byPage.get(page) ?? 0) + matches.length);
   for (const m of matches) {
     const n = m[1] || 'content';
     names.set(n, (names.get(n) ?? 0) + 1);

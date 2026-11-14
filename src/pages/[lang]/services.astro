@@ -28,7 +28,7 @@ const latest = new Date(Math.max(d.updated.getTime(), ...services.map((s) => s.d
     <Breadcrumbs lang={lang} items={crumbs} />
     <header class="page-head">
       <h1>{d.heading}</h1>
-      {d.intro && <p class="lead">{d.intro}</p>}
+      {d.intro && <Ph as="p" class="lead" when={d.placeholder} name="services-intro">{d.intro}</Ph>}
       <LastUpdated lang={lang} date={latest} />
     </header>
 
@@ -37,14 +37,14 @@ const latest = new Date(Math.max(d.updated.getTime(), ...services.map((s) => s.d
     </nav>
 
     {d.process.length > 0 && (
-      <section class="process-block">
+      <Ph as="div" when={d.placeholder} name="services-process"><section class="process-block">
         <h2>{t(lang, 'services.process')}</h2>
         <ol class="process">
           {d.process.map((p, i) => (
             <li><span class="num">{String(i + 1).padStart(2, '0')}</span><h3>{p.title}</h3><p class="muted">{p.text}</p></li>
           ))}
         </ol>
-      </section>
+      </section></Ph>
     )}
 
     {services.map((s, i) => {

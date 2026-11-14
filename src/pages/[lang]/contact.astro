@@ -7,6 +7,7 @@ import Ph from '../../components/Ph.astro';
 import { LANGS, t, type Lang } from '../../i18n/utils';
 import { getPage } from '../../lib/content';
 import { anchorId } from '../../lib/slug';
+import { formatHours } from '../../lib/hours';
 import { siteConfig, isPlaceholder } from '../../site.config';
 
 export function getStaticPaths() {
@@ -45,12 +46,13 @@ const addr = siteConfig.address[lang];
           <dt>{t(lang, 'contact.address')}</dt>
           <dd>
             <address><Ph when={isPlaceholder('address')} name="address">{addr.street}, {addr.locality}, {addr.country}</Ph></address>
-            <a href={siteConfig.mapsUrl} target="_blank" rel="noopener">{t(lang, 'contact.directions')} <span class="flip" aria-hidden="true">→</span></a>
+            <Ph when={isPlaceholder('map')} name="map"><a href={siteConfig.mapsUrl} target="_blank" rel="noopener">{t(lang, 'contact.directions')} <span class="flip" aria-hidden="true">→</span></a></Ph>
+            {isPlaceholder('geo') && <span data-placeholder="geo" hidden></span>}
           </dd>
         </div>
         <div>
           <dt>{t(lang, 'contact.hours')}</dt>
-          <dd data-hours><Ph when={isPlaceholder('hours')} name="hours">{t(lang, 'contact.hoursValue')}</Ph></dd>
+          <dd data-hours><Ph when={isPlaceholder('hours')} name="hours">{formatHours(lang, siteConfig.hours)}</Ph></dd>
         </div>
         <div>
           <dt>{t(lang, 'contact.instagram')}</dt>
@@ -76,5 +78,5 @@ const addr = siteConfig.address[lang];
   .details dd { margin: 0; font-size: var(--step-1); font-weight: 300; }
   .details dd a { color: var(--text); }
   .details address { font-style: normal; margin-block-end: 0.35rem; }
-  .details address + a { font-size: var(--step--1); color: var(--accent-text); }
+  .details address + :global(*) a, .details address + a { font-size: var(--step--1); color: var(--accent-text); }
 </style>

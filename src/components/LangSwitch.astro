@@ -5,6 +5,6 @@ const { lang } = Astro.props;
 const to = otherLang(lang);
 const href = altPath(Astro.url.pathname, to);
 ---
-<a class="lang-switch" href={href} hreflang={to} lang={to} data-lang-switch aria-label={t(lang, 'lang.switchLabel')}>
+<a class="lang-switch" href={href} hreflang={to} lang={to} data-lang-switch>
   {t(lang, 'lang.switch')}
 </a>

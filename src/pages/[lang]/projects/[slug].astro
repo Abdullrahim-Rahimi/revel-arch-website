@@ -1,0 +1,122 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import LastUpdated from '../../../components/LastUpdated.astro';
+import WhatsAppButton from '../../../components/WhatsAppButton.astro';
+import Ph from '../../../components/Ph.astro';
+import { LANGS, localizedPath, t, type Lang } from '../../../i18n/utils';
+import { getProjects, getServices, slugOf } from '../../../lib/content';
+import { projectLd } from '../../../lib/seo';
+import { siteConfig } from '../../../site.config';
+
+export async function getStaticPaths() {
+  const out = [];
+  for (const lang of LANGS) for (const p of await getProjects(lang)) out.push({ params: { lang, slug: slugOf(p.id) } });
+  return out;
+}
+
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug as string;
+const list = await getProjects(lang);
+const idx = list.findIndex((p) => slugOf(p.id) === slug);
+const project = list[idx];
+const d = project.data;
+const { Content } = await render(project);
+const services = await getServices(lang);
+const serviceName = (id: string) => services.find((s) => slugOf(s.id) === id)?.data.title ?? id;
+const prev = list[(idx - 1 + list.length) % list.length];
+const next = list[(idx + 1) % list.length];
+
+const path = `/projects/${slug}/`;
+const canonical = new URL(localizedPath(lang, path), siteConfig.url).href;
+const absImg = async (src: ImageMetadata) => new URL((await getImage({ src, format: 'jpeg', width: 1600 })).src, siteConfig.url).href;
+const images = [await absImg(d.cover), ...(await Promise.all(d.gallery.map((g) => absImg(g.src))))];
+const heading = `${d.title}, ${d.location}`;
+const crumbs = [
+  { name: t(lang, 'nav.home'), path: '/' },
+  { name: t(lang, 'nav.projects'), path: '/projects/' },
+  { name: d.title, path },
+];
+const ld = projectLd({ name: heading, description: d.description, url: canonical, image: images, location: d.location, type: d.type, year: d.year, lang });
+const num = (n: number) => new Intl.NumberFormat(lang === 'ar' ? 'ar-KW-u-nu-latn' : 'en-GB').format(n);
+---
+<BaseLayout lang={lang} title={heading} description={d.description} path={path} breadcrumbs={crumbs} jsonLd={[ld]} ogImage={images[0]}>
+  <article class="container page">
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <header class="page-head">
+      <p class="eyebrow">{t(lang, `projects.type.${d.type}`)}</p>
+      <h1><Ph when={d.placeholder}>{d.title}</Ph><span class="loc">, {d.location}</span></h1>
+      <LastUpdated lang={lang} date={d.updated} />
+    </header>
+
+    <Ph as="div" when={d.placeholder} class="hero">
+      <Picture src={d.cover} alt={d.coverAlt} formats={['avif', 'webp']} widths={[640, 1200, 1800, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
+    </Ph>
+    {d.isRender && <p class="render-note" data-render-note>{t(lang, 'projects.renderNote')}</p>}
+
+    <div class="body">
+      <dl class="facts" aria-label={t(lang, 'projects.facts.title')}>
+        <div data-fact="type"><dt>{t(lang, 'projects.facts.type')}</dt><dd>{t(lang, `projects.type.${d.type}`)}</dd></div>
+        <div><dt>{t(lang, 'projects.facts.location')}</dt><dd data-fact="location">{d.location}</dd></div>
+        {d.plotArea && <div><dt>{t(lang, 'projects.facts.plot')}</dt><dd><Ph when={d.placeholder}><bdi dir="ltr">{num(d.plotArea)} m²</bdi></Ph></dd></div>}
+        {d.builtArea && <div><dt>{t(lang, 'projects.facts.built')}</dt><dd><Ph when={d.placeholder}><bdi dir="ltr">{num(d.builtArea)} m²</bdi></Ph></dd></div>}
+        {d.floors && <div><dt>{t(lang, 'projects.facts.floors')}</dt><dd><Ph when={d.placeholder}>{d.floors}</Ph></dd></div>}
+        {d.year && <div><dt>{t(lang, 'projects.facts.year')}</dt><dd>{d.year}</dd></div>}
+        <div data-fact="status"><dt>{t(lang, 'projects.facts.status')}</dt><dd>{t(lang, `projects.status.${d.status}`)}</dd></div>
+        <div><dt>{t(lang, 'projects.facts.services')}</dt><dd>
+          {d.services.map((s, i) => <>{i > 0 && (lang === 'ar' ? '، ' : ', ')}<a href={localizedPath(lang, `/services/#${s}`)}>{serviceName(s)}</a></>)}
+        </dd></div>
+      </dl>
+      <Ph as="div" when={d.placeholder} class="story"><Content /></Ph>
+    </div>
+
+    {d.quote && (
+      <blockquote class="quote"><p>“{d.quote.text}”</p><footer>— {d.quote.by}</footer></blockquote>
+    )}
+
+    {d.gallery.length > 0 && (
+      <section class="gallery" aria-label={t(lang, 'projects.gallery')}>
+        {d.gallery.map((g) => (
+          <Ph as="div" when={d.placeholder} class="g-item">
+            <Picture src={g.src} alt={g.alt} formats={['avif', 'webp']} widths={[640, 1200, 1800]} sizes="(min-width: 52rem) 50vw, 100vw" loading="lazy" />
+          </Ph>
+        ))}
+      </section>
+    )}
+
+    <div class="cta"><WhatsAppButton lang={lang} label={t(lang, 'cta.discuss')} /></div>
+
+    {list.length > 1 && (
+      <nav class="pager" aria-label={t(lang, 'nav.projects')}>
+        <a href={localizedPath(lang, `/projects/${slugOf(prev.id)}/`)} rel="prev"><span class="muted">{t(lang, 'projects.prev')}</span><span>{prev.data.title}</span></a>
+        <a href={localizedPath(lang, `/projects/${slugOf(next.id)}/`)} rel="next"><span class="muted">{t(lang, 'projects.next')}</span><span>{next.data.title}</span></a>
+      </nav>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .page { padding-block: var(--space-l) 0; }
+  .page-head h1 { font-size: var(--step-3); max-inline-size: 28ch; }
+  .page-head .loc { color: var(--muted); }
+  .hero { aspect-ratio: 16 / 9; overflow: hidden; }
+  .hero :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .render-note { margin-block-start: var(--space-xs); font-size: var(--step--1); color: var(--muted); }
+  .body { display: grid; gap: var(--space-l); padding-block: var(--space-l); }
+  @media (min-width: 52rem) { .body { grid-template-columns: 1fr 2fr; } }
+  .facts { margin: 0; display: grid; gap: var(--space-s); align-content: start; }
+  .facts div { display: grid; gap: 0.15rem; padding-block-end: var(--space-s); border-block-end: 1px solid var(--line); }
+  .facts dt { font-size: var(--step--1); color: var(--muted); }
+  .facts dd { margin: 0; }
+  .quote { margin: 0 0 var(--space-l); padding-inline-start: var(--space-m); border-inline-start: 2px solid var(--accent); font-size: var(--step-1); }
+  .gallery { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); }
+  .g-item { aspect-ratio: 3 / 2; overflow: hidden; }
+  .g-item :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .cta { padding-block: var(--space-l); }
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-m); padding-block: var(--space-l); border-block-start: 1px solid var(--line); }
+  .pager a { display: grid; gap: 0.25rem; color: var(--text); text-decoration: none; }
+  .pager a[rel='next'] { text-align: end; }
+  .pager a:hover span:last-child { color: var(--accent-text); }
+</style>

@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import Ph from '../../../components/Ph.astro';
+import { LANGS, t, type Lang } from '../../../i18n/utils';
+import { getPage, getProjects, slugOf } from '../../../lib/content';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const page = await getPage(lang, 'projects');
+const projects = await getProjects(lang);
+const d = page.data;
+const crumbs = [{ name: t(lang, 'nav.home'), path: '/' }, { name: t(lang, 'nav.projects'), path: '/projects/' }];
+const filters = ['all', 'villa', 'chalet', 'commercial'] as const;
+---
+<BaseLayout lang={lang} title={d.title} description={d.description} path="/projects/" breadcrumbs={crumbs}>
+  <div class="container page">
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <header class="page-head">
+      <h1>{d.heading}</h1>
+      {d.intro && <Ph as="p" class="lead" when={d.placeholder}>{d.intro}</Ph>}
+    </header>
+
+    <div class="filters" role="group" aria-label={t(lang, 'projects.filter.label')}>
+      {filters.map((f, i) => (
+        <button type="button" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>{t(lang, `projects.filter.${f}`)}</button>
+      ))}
+    </div>
+
+    <div class="grid" data-project-grid>
+      {projects.map((p, i) => (
+        <Ph as="div" when={p.data.placeholder} class="cell">
+          <ProjectCard lang={lang} slug={slugOf(p.id)} title={p.data.title} type={p.data.type} location={p.data.location} cover={p.data.cover} coverAlt={p.data.coverAlt} isRender={p.data.isRender} eager={i < 2} />
+        </Ph>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Progressive enhancement: without JS every project stays visible.
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-project-card]');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      cards.forEach((c) => {
+        const cell = c.closest<HTMLElement>('.cell') ?? c;
+        cell.hidden = !(f === 'all' || c.dataset.type === f);
+      });
+    }),
+  );
+</script>
+
+<style>
+  .page { padding-block: var(--space-l) 0; }
+  .page-head { margin-block-end: var(--space-m); }
+  .filters { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-block-end: var(--space-l); }
+  .filters button {
+    font: inherit; font-size: var(--step--1); cursor: pointer;
+    padding: 0.45rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--text);
+  }
+  .filters button[aria-pressed='true'] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .grid { display: grid; gap: var(--space-l) var(--space-m); grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); }
+  .cell[hidden] { display: none; }
+</style>

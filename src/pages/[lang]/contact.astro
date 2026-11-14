@@ -31,26 +31,26 @@ const addr = siteConfig.address[lang];
       <dl>
         <div>
           <dt>{t(lang, 'contact.whatsapp')}</dt>
-          <dd data-whatsapp-number><Ph as="bdi" dir="ltr" when={isPlaceholder('whatsapp')}>{siteConfig.whatsapp}</Ph></dd>
+          <dd data-whatsapp-number><Ph as="bdi" dir="ltr" when={isPlaceholder('whatsapp')} name="whatsapp">{siteConfig.whatsapp}</Ph></dd>
         </div>
         <div>
           <dt>{t(lang, 'contact.phone')}</dt>
-          <dd><a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('phone')}>{siteConfig.phone}</Ph></a></dd>
+          <dd><a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('phone')} name="phone">{siteConfig.phone}</Ph></a></dd>
         </div>
         <div>
           <dt>{t(lang, 'contact.email')}</dt>
-          <dd><a href={`mailto:${siteConfig.email}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('email')}>{siteConfig.email}</Ph></a></dd>
+          <dd><a href={`mailto:${siteConfig.email}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('email')} name="email">{siteConfig.email}</Ph></a></dd>
         </div>
         <div>
           <dt>{t(lang, 'contact.address')}</dt>
           <dd>
-            <address><Ph when={isPlaceholder('address')}>{addr.street}, {addr.locality}, {addr.country}</Ph></address>
+            <address><Ph when={isPlaceholder('address')} name="address">{addr.street}, {addr.locality}, {addr.country}</Ph></address>
             <a href={siteConfig.mapsUrl} target="_blank" rel="noopener">{t(lang, 'contact.directions')} <span class="flip" aria-hidden="true">→</span></a>
           </dd>
         </div>
         <div>
           <dt>{t(lang, 'contact.hours')}</dt>
-          <dd data-hours><Ph when={isPlaceholder('hours')}>{t(lang, 'contact.hoursValue')}</Ph></dd>
+          <dd data-hours><Ph when={isPlaceholder('hours')} name="hours">{t(lang, 'contact.hoursValue')}</Ph></dd>
         </div>
         <div>
           <dt>{t(lang, 'contact.instagram')}</dt>

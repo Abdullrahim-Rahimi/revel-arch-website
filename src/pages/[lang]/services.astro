@@ -1,0 +1,98 @@
+---
+import { Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import Faq from '../../components/Faq.astro';
+import Ph from '../../components/Ph.astro';
+import { LANGS, t, type Lang } from '../../i18n/utils';
+import { getPage, getServices, slugOf } from '../../lib/content';
+import { faqLd } from '../../lib/seo';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const page = await getPage(lang, 'services');
+const services = await getServices(lang);
+const rendered = await Promise.all(services.map((s) => render(s)));
+const d = page.data;
+const crumbs = [{ name: t(lang, 'nav.home'), path: '/' }, { name: t(lang, 'nav.services'), path: '/services/' }];
+const allFaq = services.flatMap((s) => s.data.faq);
+const latest = new Date(Math.max(d.updated.getTime(), ...services.map((s) => s.data.updated.getTime())));
+---
+<BaseLayout lang={lang} title={d.title} description={d.description} path="/services/" breadcrumbs={crumbs} jsonLd={[faqLd(allFaq)]}>
+  <div class="container page">
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <header class="page-head">
+      <h1>{d.heading}</h1>
+      {d.intro && <p class="lead">{d.intro}</p>}
+      <LastUpdated lang={lang} date={latest} />
+    </header>
+
+    <nav class="service-index" aria-label={t(lang, 'nav.services')}>
+      <ul>{services.map((s) => <li><a href={`#${slugOf(s.id)}`}>{s.data.title}</a></li>)}</ul>
+    </nav>
+
+    {d.process.length > 0 && (
+      <section class="process-block">
+        <h2>{t(lang, 'services.process')}</h2>
+        <ol class="process">
+          {d.process.map((p, i) => (
+            <li><span class="num">{String(i + 1).padStart(2, '0')}</span><h3>{p.title}</h3><p class="muted">{p.text}</p></li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {services.map((s, i) => {
+      const { Content } = rendered[i];
+      return (
+        <section class="service" id={slugOf(s.id)} data-service>
+          <div class="service-media">
+            <Ph as="div" when={s.data.placeholder} class="media">
+              <Picture src={s.data.image} alt={s.data.title} formats={['avif', 'webp']} widths={[480, 800, 1200]} sizes="(min-width: 52rem) 40vw, 100vw" loading="lazy" />
+            </Ph>
+          </div>
+          <div class="service-body">
+            <h2>{s.data.title}</h2>
+            <p class="lead">{s.data.summary}</p>
+            <Ph as="div" when={s.data.placeholder} class="prose"><Content /></Ph>
+            <h3>{t(lang, 'services.forWho')}</h3>
+            <p class="muted">{s.data.forWho}</p>
+            <h3>{t(lang, 'services.deliverables')}</h3>
+            <ul class="deliverables">{s.data.deliverables.map((x) => <li>{x}</li>)}</ul>
+            <h3>{t(lang, 'services.faq')}</h3>
+            <Faq items={s.data.faq} placeholder={s.data.placeholder} />
+            <div class="cta"><WhatsAppButton lang={lang} label={t(lang, 'cta.discuss')} /></div>
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</BaseLayout>
+
+<style>
+  .page { padding-block: var(--space-l) 0; }
+  .page-head { margin-block-end: var(--space-m); }
+  .service-index ul { display: flex; flex-wrap: wrap; gap: var(--space-xs); list-style: none; margin: 0 0 var(--space-l); padding: 0; }
+  .service-index a { display: inline-block; padding: 0.4rem 0.9rem; border: 1px solid var(--line); border-radius: 999px; color: var(--text); text-decoration: none; font-size: var(--step--1); }
+  .service-index a:hover { border-color: var(--accent-text); }
+  .process-block { padding-block: var(--space-l); border-block-start: 1px solid var(--line); }
+  .process { list-style: none; margin: var(--space-m) 0 0; padding: 0; display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+  .process .num { display: block; color: var(--accent-text); font-size: var(--step--1); letter-spacing: 0.15em; margin-block-end: var(--space-xs); }
+  .service { display: grid; gap: var(--space-l); padding-block: var(--space-xl); border-block-start: 1px solid var(--line); scroll-margin-block-start: 5rem; }
+  @media (min-width: 52rem) {
+    .service { grid-template-columns: 2fr 3fr; }
+    .service-media { position: sticky; inset-block-start: 6rem; align-self: start; }
+  }
+  .media { aspect-ratio: 4 / 3; overflow: hidden; }
+  .media :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .service-body h3 { margin-block-start: var(--space-m); font-size: var(--step-0); text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+  :global(:lang(ar)) .service-body h3 { letter-spacing: 0; text-transform: none; }
+  .deliverables { margin: 0; padding-inline-start: 1.2rem; display: grid; gap: 0.35rem; }
+  .deliverables li::marker { color: var(--accent-text); }
+  .cta { margin-block-start: var(--space-m); }
+</style>

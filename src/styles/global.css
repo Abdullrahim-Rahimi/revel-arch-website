@@ -267,7 +267,7 @@ bdi[dir='ltr'] { unicode-bidi: isolate; }
 .site-footer a { color: var(--muted); text-decoration: none; }
 .site-footer a:hover { color: var(--text); }
 .site-footer .brand svg { inline-size: 6rem; margin-block-end: var(--space-s); }
-.footer-bottom { grid-column: 1 / -1; padding-block-start: var(--space-m); border-block-start: 1px solid var(--line); }
+.footer-bottom { grid-column: 1 / -1; max-inline-size: none; padding-block-start: var(--space-m); border-block-start: 1px solid var(--line); }
 
 /* ---------- Breadcrumbs & meta ---------- */
 .breadcrumbs ol {

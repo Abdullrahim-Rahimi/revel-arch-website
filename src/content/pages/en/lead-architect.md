@@ -13,7 +13,7 @@ sections:
   - question: "How does Husain approach a new home?"
     answer: "He starts with the family rather than the plot: who lives in the house, how they spend their days, how they host, and what they need from each room. Layouts, light and privacy are then designed around those answers, so the house fits the family closely. [Owner to confirm or rewrite.]"
   - question: "What qualifications does Husain hold?"
-    answer: "[Degree, university and year.] [Professional licence and memberships, e.g. Kuwait Society of Engineers.] [Owner to supply; we will not publish anything unconfirmed.]"
+    answer: "Husain holds a [DEGREE] in architecture from [UNIVERSITY], awarded in [YEAR]. He practises under professional licence [LICENCE NUMBER] issued by [AUTHORITY] and is a member of [MEMBERSHIPS, e.g. Kuwait Society of Engineers]. [Owner to supply these details; nothing unconfirmed will be published.]"
 knowsAbout:
   - "Residential villa design"
   - "Chalet and coastal homes"

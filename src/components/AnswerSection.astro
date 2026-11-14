@@ -1,0 +1,19 @@
+---
+// Answer-first block: a question as the heading, then a self-contained 40–60 word answer
+// directly beneath it (the passage search engines and AI assistants quote).
+import Ph from './Ph.astro';
+interface Props { question: string; answer: string; id?: string; placeholder?: boolean }
+const { question, answer, id, placeholder = false } = Astro.props;
+---
+<section class="answer-section" aria-labelledby={id}>
+  <h2 id={id}>{question}</h2>
+  <Ph as="p" class="answer" when={placeholder}>{answer}</Ph>
+  <slot />
+</section>
+
+<style>
+  .answer-section { padding-block: var(--space-l); border-block-start: 1px solid var(--line); }
+  .answer-section h2 { font-size: var(--step-2); max-inline-size: 30ch; }
+  .answer-section :global(.answer) { font-size: var(--step-1); font-weight: 300; color: var(--text); max-inline-size: 60ch; }
+  :global(:lang(ar)) .answer-section :global(.answer) { font-weight: 400; }
+</style>

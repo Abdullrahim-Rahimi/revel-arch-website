@@ -1,0 +1,64 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AnswerSection from '../../components/AnswerSection.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import Ph from '../../components/Ph.astro';
+import { LANGS, t, type Lang } from '../../i18n/utils';
+import { getPage } from '../../lib/content';
+import { anchorId } from '../../lib/slug';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const page = await getPage(lang, 'about');
+const d = page.data;
+const crumbs = [{ name: t(lang, 'nav.home'), path: '/' }, { name: t(lang, 'nav.about'), path: '/about/' }];
+---
+<BaseLayout lang={lang} title={d.title} description={d.description} path="/about/" breadcrumbs={crumbs}>
+  <div class="container page">
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <header class="page-head">
+      <h1>{d.heading}</h1>
+      {d.intro && <Ph as="p" class="lead" when={d.placeholder}>{d.intro}</Ph>}
+      <LastUpdated lang={lang} date={d.updated} />
+    </header>
+
+    {d.image && (
+      <Ph as="div" class="wide-media" when={d.placeholder}>
+        <Picture src={d.image} alt={d.imageAlt ?? ''} formats={['avif', 'webp']} widths={[640, 1200, 1800]} sizes="100vw" loading="eager" />
+      </Ph>
+    )}
+
+    {d.sections.map((s, i) => (
+      <AnswerSection id={anchorId(s.question, i)} question={s.question} answer={s.answer} placeholder={d.placeholder} />
+    ))}
+
+    {d.principles.length > 0 && (
+      <section class="principles-block">
+        <h2>{t(lang, 'home.approach')}</h2>
+        <ol class="principles">
+          {d.principles.map((p, i) => (
+            <li><span class="num">{String(i + 1).padStart(2, '0')}</span><h3>{p.title}</h3><p class="muted">{p.text}</p></li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <div class="cta"><WhatsAppButton lang={lang} label={t(lang, 'cta.discuss')} /></div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page { padding-block: var(--space-l) 0; }
+  .page-head { margin-block-end: var(--space-l); }
+  .wide-media { aspect-ratio: 21 / 9; overflow: hidden; margin-block-end: var(--space-l); }
+  .wide-media :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .principles-block { padding-block: var(--space-l); border-block-start: 1px solid var(--line); }
+  .principles { list-style: none; margin: var(--space-m) 0 0; padding: 0; display: grid; gap: var(--space-l); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .principles .num { display: block; color: var(--accent-text); font-size: var(--step--1); letter-spacing: 0.15em; margin-block-end: var(--space-s); }
+  .cta { padding-block: var(--space-l); }
+</style>

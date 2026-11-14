@@ -1,0 +1,16 @@
+---
+// Temporary stub; replaced by the full Home page in Task 5.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LANGS, type Lang } from '../../i18n/utils';
+import { siteConfig } from '../../site.config';
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const desc = lang === 'ar'
+  ? 'ريفيل للعمارة: فلل وشاليهات راقية في الكويت، مصمّمة حول احتياجات العائلة وطريقة عيشها.'
+  : 'Revēl Architecture designs high-end villas and chalets in Kuwait, shaped around how each family lives.';
+---
+<BaseLayout lang={lang} title={lang === 'ar' ? 'عمارة تُصمَّم حولك' : 'Architecture shaped around you'} description={desc} path="/" isHome>
+  <section class="section"><div class="container"><h1>{siteConfig.name[lang]}</h1></div></section>
+</BaseLayout>

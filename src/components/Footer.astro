@@ -1,0 +1,32 @@
+---
+import Logo from './Logo.astro';
+import Ph from './Ph.astro';
+import { localizedPath, t, type Lang } from '../i18n/utils';
+import { siteConfig, isPlaceholder } from '../site.config';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const year = new Date().getFullYear();
+const nav = [
+  ['/about/', 'nav.about'], ['/lead-architect/', 'nav.leadArchitect'], ['/services/', 'nav.services'],
+  ['/projects/', 'nav.projects'], ['/contact/', 'nav.contact'],
+] as const;
+---
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <a class="brand" href={localizedPath(lang, '/')}><Logo title={siteConfig.name[lang]} /></a>
+      <p>{t(lang, 'footer.tagline')}</p>
+    </div>
+    <nav aria-label={t(lang, 'nav.primary')}>
+      <ul>{nav.map(([p, k]) => <li><a href={localizedPath(lang, p)}>{t(lang, k)}</a></li>)}</ul>
+    </nav>
+    <div>
+      <ul>
+        <li>{t(lang, 'contact.phone')}: <a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('phone')}>{siteConfig.phone}</Ph></a></li>
+        <li>{t(lang, 'contact.email')}: <a href={`mailto:${siteConfig.email}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('email')}>{siteConfig.email}</Ph></a></li>
+        <li>{t(lang, 'footer.followUs')}: <a href={siteConfig.instagram} rel="me noopener" target="_blank"><bdi dir="ltr">@rvl.arch</bdi></a></li>
+      </ul>
+    </div>
+    <p class="footer-bottom">© {year} {siteConfig.name[lang]}. {t(lang, 'footer.rights')}</p>
+  </div>
+</footer>

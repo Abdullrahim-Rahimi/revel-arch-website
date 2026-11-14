@@ -1,0 +1,10 @@
+---
+import { altPath, otherLang, t, type Lang } from '../i18n/utils';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const to = otherLang(lang);
+const href = altPath(Astro.url.pathname, to);
+---
+<a class="lang-switch" href={href} hreflang={to} lang={to} data-lang-switch aria-label={t(lang, 'lang.switchLabel')}>
+  {t(lang, 'lang.switch')}
+</a>

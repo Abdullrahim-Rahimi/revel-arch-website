@@ -1,0 +1,14 @@
+---
+import { localizedPath, t, type Lang } from '../i18n/utils';
+interface Props { lang: Lang; items: { name: string; path: string }[] }
+const { lang, items } = Astro.props;
+---
+<nav class="breadcrumbs" aria-label={t(lang, 'common.breadcrumbs')}>
+  <ol>
+    {items.map((it, i) => (
+      <li>{i === items.length - 1
+        ? <span aria-current="page">{it.name}</span>
+        : <a href={localizedPath(lang, it.path)}>{it.name}</a>}</li>
+    ))}
+  </ol>
+</nav>

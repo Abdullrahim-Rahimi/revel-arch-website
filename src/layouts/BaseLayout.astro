@@ -1,0 +1,48 @@
+---
+import '@fontsource/lato/300.css';
+import '@fontsource/lato/400.css';
+import '@fontsource/ibm-plex-sans-arabic/300.css';
+import '@fontsource/ibm-plex-sans-arabic/400.css';
+import '@fontsource/ibm-plex-sans-arabic/500.css';
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { dirOf, t, type Lang } from '../i18n/utils';
+import { siteConfig } from '../site.config';
+
+export interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: string;
+  jsonLd?: object[];
+  breadcrumbs?: { name: string; path: string }[];
+  isHome?: boolean;
+}
+const { lang, title, description, path, ogImage, jsonLd = [], isHome = false } = Astro.props;
+const unreviewedArabic = lang === 'ar' && !siteConfig.arabicApproved;
+---
+<!doctype html>
+<html lang={lang} dir={dirOf(lang)} data-env={siteConfig.deployEnv}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1d1e25" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <Seo lang={lang} title={title} description={description} path={path} ogImage={ogImage} jsonLd={jsonLd} isHome={isHome} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t(lang, 'common.skipToContent')}</a>
+    <Header lang={lang} />
+    <main id="main" data-placeholder={unreviewedArabic ? 'arabic-unreviewed' : undefined}>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <WhatsAppButton lang={lang} variant="sticky" />
+    {siteConfig.deployEnv === 'preview' && <span class="ph-badge" aria-hidden="true">Preview · {t(lang, 'placeholder.badge')}</span>}
+  </body>
+</html>

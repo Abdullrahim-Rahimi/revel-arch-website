@@ -9,7 +9,8 @@ import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
-import { dirOf, t, type Lang } from '../i18n/utils';
+import { dirOf, localizedPath, t, type Lang } from '../i18n/utils';
+import { organizationLd, breadcrumbLd } from '../lib/seo';
 import { siteConfig } from '../site.config';
 
 export interface Props {
@@ -22,8 +23,14 @@ export interface Props {
   breadcrumbs?: { name: string; path: string }[];
   isHome?: boolean;
 }
-const { lang, title, description, path, ogImage, jsonLd = [], isHome = false } = Astro.props;
+const { lang, title, description, path, ogImage, jsonLd = [], breadcrumbs, isHome = false } = Astro.props;
 const unreviewedArabic = lang === 'ar' && !siteConfig.arabicApproved;
+const abs = (p: string) => new URL(localizedPath(lang, p), siteConfig.url).href;
+const allLd: object[] = [
+  organizationLd(lang),
+  ...(breadcrumbs ? [breadcrumbLd(breadcrumbs.map((b) => ({ name: b.name, url: abs(b.path) })))] : []),
+  ...jsonLd,
+];
 ---
 <!doctype html>
 <html lang={lang} dir={dirOf(lang)} data-env={siteConfig.deployEnv}>
@@ -33,7 +40,7 @@ const unreviewedArabic = lang === 'ar' && !siteConfig.arabicApproved;
     <meta name="theme-color" content="#1d1e25" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>document.documentElement.classList.add('js')</script>
-    <Seo lang={lang} title={title} description={description} path={path} ogImage={ogImage} jsonLd={jsonLd} isHome={isHome} />
+    <Seo lang={lang} title={title} description={description} path={path} ogImage={ogImage} jsonLd={allLd} isHome={isHome} />
   </head>
   <body>
     <a class="skip-link" href="#main">{t(lang, 'common.skipToContent')}</a>

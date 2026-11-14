@@ -258,7 +258,10 @@ bdi[dir='ltr'] { unicode-bidi: isolate; }
 .site-footer .container {
   display: grid;
   gap: var(--space-l);
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: 1fr;
+}
+@media (min-width: 52rem) {
+  .site-footer .container { grid-template-columns: 2fr 1fr 1.5fr; }
 }
 .site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
 .site-footer a { color: var(--muted); text-decoration: none; }

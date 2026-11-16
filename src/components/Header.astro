@@ -1,0 +1,44 @@
+---
+import Logo from './Logo.astro';
+import LangSwitch from './LangSwitch.astro';
+import { localizedPath, t, stripLang, type Lang } from '../i18n/utils';
+import { siteConfig } from '../site.config';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const current = stripLang(Astro.url.pathname);
+const items = [
+  { path: '/about/', key: 'nav.about' },
+  { path: '/lead-architect/', key: 'nav.leadArchitect' },
+  { path: '/services/', key: 'nav.services' },
+  { path: '/projects/', key: 'nav.projects' },
+  { path: '/contact/', key: 'nav.contact' },
+] as const;
+const isCurrent = (p: string) => current === p || (p !== '/' && current.startsWith(p));
+---
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href={localizedPath(lang, '/')} aria-label={`${siteConfig.name[lang]} — ${t(lang, 'nav.home')}`}>
+      <Logo title={siteConfig.name[lang]} />
+    </a>
+    <nav id="site-nav" class="site-nav" aria-label={t(lang, 'nav.primary')}>
+      <ul>
+        {items.map((i) => (
+          <li><a href={localizedPath(lang, i.path)} aria-current={isCurrent(i.path) ? 'page' : undefined}>{t(lang, i.key)}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <LangSwitch lang={lang} />
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">{t(lang, 'nav.menu')}</button>
+    </div>
+  </div>
+</header>
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    nav?.toggleAttribute('data-open', !open);
+  });
+</script>

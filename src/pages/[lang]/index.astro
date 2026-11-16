@@ -1,0 +1,143 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import Ph from '../../components/Ph.astro';
+import { LANGS, localizedPath, t, type Lang } from '../../i18n/utils';
+import { getPage, getProjects, getServices, slugOf } from '../../lib/content';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const home = await getPage(lang, 'home');
+const architect = await getPage(lang, 'lead-architect');
+const projects = (await getProjects(lang)).filter((p) => p.data.featured).slice(0, 3);
+const services = await getServices(lang);
+const d = home.data;
+---
+<BaseLayout lang={lang} title={d.title} description={d.description} path="/" isHome>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text reveal">
+        <span class="eyebrow">{lang === 'ar' ? 'ريفيل للعمارة · الكويت' : 'Revēl Architecture · Kuwait'}</span>
+        <h1>{d.heading}</h1>
+        <p class="lead">{d.intro}</p>
+        <div class="actions">
+          <WhatsAppButton lang={lang} label={t(lang, 'cta.discuss')} />
+          <a class="btn btn-ghost" href={localizedPath(lang, '/projects/')}>{t(lang, 'projects.viewAll')} <span class="flip" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      {d.image && (
+        <Ph as="div" when={d.placeholder} class="hero-media">
+          <Picture src={d.image} alt={d.imageAlt ?? ''} formats={['avif', 'webp']} widths={[640, 1024, 1600]} sizes="(min-width: 64rem) 55vw, 100vw" loading="eager" fetchpriority="high" />
+        </Ph>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>{t(lang, 'home.featured')}</h2>
+        <a href={localizedPath(lang, '/projects/')}>{t(lang, 'projects.viewAll')} <span class="flip" aria-hidden="true">→</span></a>
+      </div>
+      <div class="grid-3">
+        {projects.map((p) => (
+          <Ph as="div" when={p.data.placeholder}>
+            <ProjectCard lang={lang} slug={slugOf(p.id)} title={p.data.title} type={p.data.type} location={p.data.location} cover={p.data.cover} coverAlt={p.data.coverAlt} isRender={p.data.isRender} />
+          </Ph>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <h2>{t(lang, 'home.services')}</h2>
+      <ul class="service-list" data-services>
+        {services.map((s) => (
+          <li>
+            <a href={localizedPath(lang, `/services/#${slugOf(s.id)}`)}>
+              <span class="name">{s.data.title}</span>
+              <span class="summary">{s.data.summary}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>{t(lang, 'home.approach')}</h2>
+      <ol class="principles">
+        {d.principles.map((p, i) => (
+          <li><span class="num">{String(i + 1).padStart(2, '0')}</span><h3>{p.title}</h3><p class="muted">{p.text}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container architect">
+      {architect.data.image && (
+        <Ph as="div" when={architect.data.placeholder} class="portrait">
+          <Picture src={architect.data.image} alt={architect.data.imageAlt ?? ''} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 52rem) 30vw, 80vw" loading="lazy" />
+        </Ph>
+      )}
+      <div>
+        <span class="eyebrow">{t(lang, 'home.meetArchitect')}</span>
+        <blockquote><Ph as="p" when={home.data.placeholder}>“{d.pullQuote}”</Ph></blockquote>
+        <p class="who">{architect.data.personName}<span class="muted"> · {architect.data.jobTitle}</span></p>
+        <a class="btn btn-ghost" href={localizedPath(lang, '/lead-architect/')} data-architect-teaser>{t(lang, 'common.readMore')} <span class="flip" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section closing">
+    <div class="container">
+      <h2>{t(lang, 'home.closing')}</h2>
+      <WhatsAppButton lang={lang} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero { padding-block: var(--space-l) var(--space-xl); }
+  .hero-grid { display: grid; gap: var(--space-l); align-items: center; }
+  @media (min-width: 64rem) { .hero-grid { grid-template-columns: 5fr 6fr; } }
+  .hero h1 { font-size: var(--step-4); }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin-block-start: var(--space-m); }
+  .hero-media { aspect-ratio: 4 / 3; overflow: hidden; }
+  .hero-media :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-s); margin-block-end: var(--space-m); flex-wrap: wrap; }
+  .section-head h2 { margin: 0; }
+  .grid-3 { display: grid; gap: var(--space-l) var(--space-m); grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
+
+  .split { display: grid; gap: var(--space-l); }
+  @media (min-width: 52rem) { .split { grid-template-columns: 1fr 2fr; } }
+  .service-list { list-style: none; margin: 0; padding: 0; border-block-start: 1px solid var(--line); }
+  .service-list li { border-block-end: 1px solid var(--line); }
+  .service-list a { display: grid; gap: 0.25rem; padding-block: var(--space-m); color: inherit; text-decoration: none; }
+  @media (min-width: 40rem) { .service-list a { grid-template-columns: 14rem 1fr; gap: var(--space-m); } }
+  .service-list .name { font-size: var(--step-1); }
+  .service-list .summary { color: var(--muted); }
+  .service-list a:hover .name { color: var(--accent-text); }
+
+  .principles { list-style: none; margin: var(--space-l) 0 0; padding: 0; display: grid; gap: var(--space-l); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .principles .num { display: block; color: var(--accent-text); font-size: var(--step--1); letter-spacing: 0.15em; margin-block-end: var(--space-s); }
+
+  .architect { display: grid; gap: var(--space-l); align-items: center; }
+  @media (min-width: 52rem) { .architect { grid-template-columns: minmax(0, 2fr) 3fr; } }
+  .portrait { aspect-ratio: 4 / 5; overflow: hidden; max-inline-size: 26rem; }
+  .portrait :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  blockquote { margin: 0 0 var(--space-m); font-size: var(--step-2); font-weight: 300; line-height: 1.35; }
+  blockquote p { max-inline-size: 32ch; margin: 0; }
+  .who { margin-block-end: var(--space-m); }
+
+  .closing { text-align: center; }
+  .closing h2 { margin-inline: auto; max-inline-size: 20ch; margin-block-end: var(--space-m); }
+</style>

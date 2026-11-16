@@ -1,0 +1,12 @@
+---
+// Wraps owner-supplied content that is still a placeholder. The check-placeholders
+// script fails production builds while any data-placeholder remains in the HTML.
+// `name` labels what is missing (e.g. 'phone') in that script's report.
+interface Props { as?: 'span' | 'div' | 'p' | 'bdi'; when?: boolean; class?: string; dir?: 'ltr' | 'rtl'; name?: string }
+const { as: Tag = 'span', when = true, class: className, dir, name = 'content' } = Astro.props;
+---
+{when ? (
+  <Tag data-placeholder={name} class={className} dir={dir}><slot /></Tag>
+) : (
+  <Tag class={className} dir={dir}><slot /></Tag>
+)}

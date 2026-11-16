@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AnswerSection from '../../components/AnswerSection.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import Ph from '../../components/Ph.astro';
+import { LANGS, t, type Lang } from '../../i18n/utils';
+import { getPage } from '../../lib/content';
+import { anchorId } from '../../lib/slug';
+import { formatHours } from '../../lib/hours';
+import { siteConfig, isPlaceholder } from '../../site.config';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const page = await getPage(lang, 'contact');
+const d = page.data;
+const crumbs = [{ name: t(lang, 'nav.home'), path: '/' }, { name: t(lang, 'nav.contact'), path: '/contact/' }];
+const addr = siteConfig.address[lang];
+---
+<BaseLayout lang={lang} title={d.title} description={d.description} path="/contact/" breadcrumbs={crumbs}>
+  <div class="container page">
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <header class="page-head">
+      <h1>{d.heading}</h1>
+      {d.intro && <p class="lead">{d.intro}</p>}
+      <WhatsAppButton lang={lang} />
+    </header>
+
+    <div class="details">
+      <dl>
+        <div>
+          <dt>{t(lang, 'contact.whatsapp')}</dt>
+          <dd data-whatsapp-number><Ph as="bdi" dir="ltr" when={isPlaceholder('whatsapp')} name="whatsapp">{siteConfig.whatsapp}</Ph></dd>
+        </div>
+        <div>
+          <dt>{t(lang, 'contact.phone')}</dt>
+          <dd><a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('phone')} name="phone">{siteConfig.phone}</Ph></a></dd>
+        </div>
+        <div>
+          <dt>{t(lang, 'contact.email')}</dt>
+          <dd><a href={`mailto:${siteConfig.email}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('email')} name="email">{siteConfig.email}</Ph></a></dd>
+        </div>
+        <div>
+          <dt>{t(lang, 'contact.address')}</dt>
+          <dd>
+            <address><Ph when={isPlaceholder('address')} name="address">{addr.street}, {addr.locality}, {addr.country}</Ph></address>
+            <Ph when={isPlaceholder('map')} name="map"><a href={siteConfig.mapsUrl} target="_blank" rel="noopener">{t(lang, 'contact.directions')} <span class="flip" aria-hidden="true">→</span></a></Ph>
+            {isPlaceholder('geo') && <span data-placeholder="geo" hidden></span>}
+          </dd>
+        </div>
+        <div>
+          <dt>{t(lang, 'contact.hours')}</dt>
+          <dd data-hours><Ph when={isPlaceholder('hours')} name="hours">{formatHours(lang, siteConfig.hours)}</Ph></dd>
+        </div>
+        <div>
+          <dt>{t(lang, 'contact.instagram')}</dt>
+          <dd><a href={siteConfig.instagram} target="_blank" rel="me noopener"><bdi dir="ltr">@rvl.arch</bdi></a></dd>
+        </div>
+      </dl>
+    </div>
+
+    {d.sections.map((s, i) => (
+      <AnswerSection id={anchorId(s.question, i)} question={s.question} answer={s.answer} placeholder={d.placeholder} />
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .page { padding-block: var(--space-l) 0; }
+  .page-head { margin-block-end: var(--space-l); }
+  .page-head :global(.btn) { margin-block-start: var(--space-s); }
+  .details dl { margin: 0; display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); border-block-start: 1px solid var(--line); }
+  .details dl > div { padding: var(--space-m) 0; border-block-end: 1px solid var(--line); padding-inline-end: var(--space-m); }
+  .details dt { font-size: var(--step--1); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-block-end: 0.35rem; }
+  :global(:lang(ar)) .details dt { letter-spacing: 0; text-transform: none; }
+  .details dd { margin: 0; font-size: var(--step-1); font-weight: 300; }
+  .details dd a { color: var(--text); }
+  .details address { font-style: normal; margin-block-end: 0.35rem; }
+  .details address + :global(*) a, .details address + a { font-size: var(--step--1); color: var(--accent-text); }
+</style>

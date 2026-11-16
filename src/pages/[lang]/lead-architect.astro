@@ -1,0 +1,71 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AnswerSection from '../../components/AnswerSection.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import Ph from '../../components/Ph.astro';
+import { LANGS, t, type Lang } from '../../i18n/utils';
+import { getPage } from '../../lib/content';
+import { personLd } from '../../lib/seo';
+import { anchorId } from '../../lib/slug';
+import { siteConfig } from '../../site.config';
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const page = await getPage(lang, 'lead-architect');
+const d = page.data;
+const crumbs = [{ name: t(lang, 'nav.home'), path: '/' }, { name: t(lang, 'nav.leadArchitect'), path: '/lead-architect/' }];
+const portrait = d.image ? await getImage({ src: d.image, format: 'jpeg', width: 1200 }) : undefined;
+const portraitUrl = portrait ? new URL(portrait.src, siteConfig.url).href : undefined;
+const ld = personLd(lang, { knowsAbout: d.knowsAbout, image: portraitUrl, description: d.description });
+---
+<BaseLayout lang={lang} title={d.title} description={d.description} path="/lead-architect/" breadcrumbs={crumbs} jsonLd={[ld]} ogImage={portraitUrl}>
+  <div class="container page">
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="profile">
+      {d.image && (
+        <Ph as="div" class="portrait" when={d.placeholder}>
+          <Picture src={d.image} alt={d.imageAlt ?? ''} formats={['avif', 'webp']} widths={[400, 800, 1200]} sizes="(min-width: 52rem) 35vw, 90vw" loading="eager" />
+        </Ph>
+      )}
+      <header>
+        <span class="eyebrow">{d.jobTitle}</span>
+        <h1>{d.heading}</h1>
+        {d.intro && <Ph as="p" class="lead" when={d.placeholder}>{d.intro}</Ph>}
+        {d.pullQuote && <blockquote><p>“{d.pullQuote}”</p></blockquote>}
+        <LastUpdated lang={lang} date={d.updated} />
+      </header>
+    </div>
+
+    {d.sections.map((s, i) => (
+      <AnswerSection id={anchorId(s.question, i)} question={s.question} answer={s.answer} placeholder={d.placeholder} />
+    ))}
+
+    {d.knowsAbout.length > 0 && (
+      <section class="expertise">
+        <h2>{lang === 'ar' ? 'مجالات الخبرة' : 'Areas of expertise'}</h2>
+        <ul>{d.knowsAbout.map((k) => <li>{k}</li>)}</ul>
+      </section>
+    )}
+
+    <div class="cta"><WhatsAppButton lang={lang} label={t(lang, 'cta.discuss')} /></div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page { padding-block: var(--space-l) 0; }
+  .profile { display: grid; gap: var(--space-l); align-items: end; margin-block-end: var(--space-l); }
+  @media (min-width: 52rem) { .profile { grid-template-columns: minmax(0, 2fr) 3fr; } }
+  .portrait { aspect-ratio: 4 / 5; overflow: hidden; max-inline-size: 28rem; }
+  .portrait :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  blockquote { margin: var(--space-m) 0; padding-inline-start: var(--space-m); border-inline-start: 2px solid var(--accent); font-size: var(--step-1); font-weight: 300; }
+  blockquote p { margin: 0; }
+  .expertise { padding-block: var(--space-l); border-block-start: 1px solid var(--line); }
+  .expertise ul { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: var(--space-m) 0 0; padding: 0; list-style: none; }
+  .expertise li { padding: 0.4rem 0.9rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+  .cta { padding-block: var(--space-l); }
+</style>

@@ -1,0 +1,29 @@
+{
+  "name": "revel-arch-website",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:prod": "cross-env DEPLOY_ENV=production astro build && cross-env DEPLOY_ENV=production node scripts/check-placeholders.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run tests/unit",
+    "test:dist": "vitest run tests/dist"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.5",
+    "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
+    "@fontsource/lato": "^5.3.0",
+    "astro": "^5.18.2",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "cross-env": "^10.1.0",
+    "node-html-parser": "^9.0.7",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.0"
+  }
+}

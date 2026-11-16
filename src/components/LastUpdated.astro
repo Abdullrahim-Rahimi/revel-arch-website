@@ -1,0 +1,8 @@
+---
+import { t, type Lang } from '../i18n/utils';
+interface Props { lang: Lang; date: Date }
+const { lang, date } = Astro.props;
+const iso = date.toISOString().slice(0, 10);
+const label = new Intl.DateTimeFormat(lang === 'ar' ? 'ar-KW-u-nu-latn' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+---
+<p class="last-updated">{t(lang, 'common.lastUpdated')}: <time datetime={iso}>{label}</time></p>

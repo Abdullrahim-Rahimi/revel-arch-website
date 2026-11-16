@@ -3,3 +3,7 @@ dist/
 .astro/
 docs/reference/
 .env
+.superpowers/
+.playwright-mcp/
+dist-preview/
+dist-prod/

@@ -9,8 +9,8 @@
   --text: #ecebe7;
   --muted: #a8a8b0;       /* 6.9:1 on --bg */
   --brand-grey: #8a8a8f;  /* logo strokes; decorative only */
-  --accent: #0d6b55;      /* logo macron green; fills with light text */
-  --accent-strong: #0f7d63;
+  --accent: #006859;      /* logo macron green (new logo, Nov 2026); fills with light text */
+  --accent-strong: #007a69;
   --accent-text: #6cc3a6; /* readable green on --bg */
   --on-accent: #ffffff;
 

@@ -28,7 +28,7 @@ const ld = personLd(lang, { knowsAbout: d.knowsAbout, image: portraitUrl, descri
     <Breadcrumbs lang={lang} items={crumbs} />
     <div class="profile">
       {d.image && (
-        <Ph as="div" class="portrait" when={d.placeholder}>
+        <Ph as="div" class="portrait" when={d.imagePlaceholder ?? d.placeholder}>
           <Picture src={d.image} alt={d.imageAlt ?? ''} formats={['avif', 'webp']} widths={[400, 800, 1200]} sizes="(min-width: 52rem) 35vw, 90vw" loading="eager" />
         </Ph>
       )}
@@ -37,6 +37,7 @@ const ld = personLd(lang, { knowsAbout: d.knowsAbout, image: portraitUrl, descri
         <h1>{d.heading}</h1>
         {d.intro && <Ph as="p" class="lead" when={d.placeholder}>{d.intro}</Ph>}
         {d.pullQuote && <blockquote><p>“{d.pullQuote}”</p></blockquote>}
+        <p class="profile-links"><a href={siteConfig.leadArchitect.linkedin} target="_blank" rel="me noopener">{t(lang, 'leadArchitect.linkedin')} <span class="flip" aria-hidden="true">→</span></a></p>
         <LastUpdated lang={lang} date={d.updated} />
       </header>
     </div>
@@ -47,7 +48,7 @@ const ld = personLd(lang, { knowsAbout: d.knowsAbout, image: portraitUrl, descri
 
     {d.knowsAbout.length > 0 && (
       <section class="expertise">
-        <h2>{lang === 'ar' ? 'مجالات الخبرة' : 'Areas of expertise'}</h2>
+        <h2>{t(lang, 'leadArchitect.expertise')}</h2>
         <ul>{d.knowsAbout.map((k) => <li>{k}</li>)}</ul>
       </section>
     )}

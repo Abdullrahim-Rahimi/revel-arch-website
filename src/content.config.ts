@@ -68,6 +68,8 @@ const pages = defineCollection({
       personName: z.string().optional(),
       image: image().optional(),
       imageAlt: z.string().optional(),
+      /** The image is stock while the text is confirmed. Defaults to `placeholder`. */
+      imagePlaceholder: z.boolean().optional(),
     }),
 });
 

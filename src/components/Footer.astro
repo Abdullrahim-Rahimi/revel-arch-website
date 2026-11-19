@@ -24,7 +24,7 @@ const nav = [
       <ul>
         <li>{t(lang, 'contact.phone')}: <a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('phone')} name="phone">{siteConfig.phone}</Ph></a></li>
         <li>{t(lang, 'contact.email')}: <a href={`mailto:${siteConfig.email}`}><Ph as="bdi" dir="ltr" when={isPlaceholder('email')} name="email">{siteConfig.email}</Ph></a></li>
-        <li>{t(lang, 'footer.followUs')}: <a href={siteConfig.instagram} rel="me noopener" target="_blank"><bdi dir="ltr">@rvl.arch</bdi></a></li>
+        <li>{t(lang, 'footer.followUs')}: <a href={siteConfig.instagram} rel="me noopener" target="_blank">Instagram</a> · <a href={siteConfig.linkedin} rel="me noopener" target="_blank">LinkedIn</a> · <a href={siteConfig.tiktok} rel="me noopener" target="_blank">TikTok</a></li>
       </ul>
     </div>
     <p class="footer-bottom">© {year} {siteConfig.name[lang]}. {t(lang, 'footer.rights')}</p>

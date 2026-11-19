@@ -1,28 +1,29 @@
 ---
-placeholder: true
-updated: "2026-11-14"
-title: "Sayed Husain Almousawi, Lead Architect"
-heading: "Sayed Husain Almousawi"
-personName: "Sayed Husain Almousawi"
-jobTitle: "Founder & Lead Architect"
-description: "Sayed Husain Almousawi is the founder and lead architect of Revēl Architecture in Kuwait. Background, design approach and areas of expertise."
-intro: "Husain founded Revēl Architecture in [YEAR] and leads the design of every project. [Owner to supply a 60–120 word professional background.]"
+placeholder: false
+updated: "2026-11-19"
+title: "Husain Almousawi, Founder & Principal Architect"
+heading: "Husain Almousawi"
+personName: "Husain Almousawi"
+jobTitle: "Founder & Principal Architect"
+description: "Husain Almousawi founded Revēl Architecture in Kuwait in 2020. Over eight years designing homes and commercial buildings; trained at Virginia Tech."
+intro: "Husain has over eight years of experience designing residential and commercial buildings across Kuwait. Building his practice from the ground up across varied project scales, he developed deep technical workflows inside the firm to ensure highly coordinated, BIM-driven drawings are delivered for every project. His background pairs architectural design with practical execution, giving clients clear, reliable documentation from early planning through delivery."
 sections:
   - question: "Who is the lead architect at Revēl?"
-    answer: "Sayed Husain Almousawi is the founder and lead architect of Revēl Architecture. He leads the design of every Revēl project personally, from the first conversation with the owners to the final drawings. [Owner to add education and years of experience.]"
-  - question: "How does Husain approach a new home?"
-    answer: "He starts with the family rather than the plot: who lives in the house, how they spend their days, how they host, and what they need from each room. Layouts, light and privacy are then designed around those answers, so the house fits the family closely. [Owner to confirm or rewrite.]"
+    answer: "Husain Almousawi is the founder and principal architect of Revēl Architecture, which he established in Kuwait in 2020. He has over eight years of experience designing residential and commercial buildings across Kuwait, from private villas and chalets to commercial buildings and interiors."
   - question: "What qualifications does Husain hold?"
-    answer: "Husain holds a [DEGREE] in architecture from [UNIVERSITY], awarded in [YEAR]. He practises under professional licence [LICENCE NUMBER] issued by [AUTHORITY] and is a member of [MEMBERSHIPS, e.g. Kuwait Society of Engineers]. [Owner to supply these details; nothing unconfirmed will be published.]"
+    answer: "Husain holds a Bachelor of Architecture from Virginia Tech (2015), with minors in Landscape Architecture and Industrial Design, and a Master of Science in Civil Engineering from Virginia Tech (2018). The combination of architectural design and engineering shapes the technical rigour of Revēl's drawings."
+  - question: "How does Husain make sure a design is built as drawn?"
+    answer: "He built technical workflows inside the firm so that every project is delivered with highly coordinated, BIM-driven drawings. The aim is clear, reliable documentation from early planning through delivery: drawings that, followed comprehensively, translate directly into a building free of mistakes."
 knowsAbout:
   - "Residential villa design"
-  - "Chalet and coastal homes"
-  - "Commercial building design"
+  - "Chalets"
   - "Kuwait private-housing regulations"
   - "Space planning for large families"
-pullQuote: "Before I draw anything, I want to understand how a family spends its days. The building comes from those answers."
-image: "../../../assets/placeholders/portrait.jpg"
-imageAlt: "Placeholder for a portrait of Sayed Husain Almousawi"
+  - "Facade design"
+  - "Site supervision"
+  - "Project management"
+  - "Residential building regulations"
+  - "BIM management"
+image: "../../../assets/owner/husain-almousawi.jpg"
+imageAlt: "Portrait of Husain Almousawi, founder and principal architect of Revēl Architecture"
 ---
-
-

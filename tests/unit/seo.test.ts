@@ -7,8 +7,8 @@ const roundTrip = (x: unknown) => JSON.parse(JSON.stringify(x));
 describe('organizationLd', () => {
   it('names the firm in each language', () => {
     expect(organizationLd('en').name).toBe('Revēl Architecture');
-    expect(organizationLd('ar').name).toBe('ريفيل للعمارة');
-    expect(organizationLd('en').alternateName).toBe('ريفيل للعمارة');
+    expect(organizationLd('ar').name).toBe('مكتب رڤيل للتصميم المعماري');
+    expect(organizationLd('en').alternateName).toBe('مكتب رڤيل للتصميم المعماري');
   });
   it('is a professional service with a stable id linked to the founder', () => {
     const o = organizationLd('en');
@@ -19,7 +19,7 @@ describe('organizationLd', () => {
     expect(o.address.addressCountry).toBe('KW');
   });
   it('omits placeholder contact facts instead of publishing fake values', () => {
-    const withPh = organizationLd('en');
+    const withPh = organizationLd('en', { ...siteConfig, placeholders: ['phone', 'email', 'geo'] });
     expect(withPh.telephone).toBeUndefined();
     expect(withPh.email).toBeUndefined();
     expect(withPh.geo).toBeUndefined();
@@ -27,7 +27,7 @@ describe('organizationLd', () => {
     expect(confirmed.telephone).toBe(siteConfig.phone);
     expect(confirmed.email).toBe(siteConfig.email);
     expect(confirmed.geo['@type']).toBe('GeoCoordinates');
-    expect(confirmed.openingHoursSpecification[0].opens).toBe('09:00');
+    expect(confirmed.openingHoursSpecification[0].opens).toBe('08:00');
   });
 });
 

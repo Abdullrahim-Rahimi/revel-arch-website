@@ -44,6 +44,7 @@ src/assets/           images (placeholders in src/assets/placeholders/)
 Placeholder content is marked in two ways:
 
 - Content files have `placeholder: true` in their frontmatter. Set it to `false` once the owner's text is in.
+- A page whose text is confirmed but whose image is still stock sets `imagePlaceholder: true` (pages collection only). Remove it once a real photo is in.
 - Contact details are listed in `siteConfig.placeholders` (`src/site.config.ts`). Remove each field name once its real value is in.
 - Arabic copy counts as unreviewed until `siteConfig.arabicApproved` is set to `true`, after a native Arabic reader has approved it.
 

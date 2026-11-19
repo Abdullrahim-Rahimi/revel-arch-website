@@ -1,28 +1,31 @@
 ---
-placeholder: true
-updated: "2026-11-14"
+placeholder: false
+imagePlaceholder: true
+updated: "2026-11-19"
 title: "About Revēl"
 heading: "About Revēl Architecture"
-description: "Revēl Architecture is a Kuwaiti architecture firm designing customised villas, chalets and commercial buildings. Our story, philosophy and direction."
-intro: "Revēl Architecture was founded in [YEAR] by Sayed Husain Almousawi. [Owner to complete the firm story in 150–250 words.]"
+description: "Revēl Architecture, founded in Kuwait in 2020, designs villas, chalets, commercial buildings and interiors shaped around how people live and work."
+intro: "Revēl Architecture began in 2020 with a simple belief: architecture should be shaped around the life of its inhabitants. Since founding the practice in Kuwait, we have designed over 40 villas, chalets and commercial buildings, alongside residential and commercial interior design projects across the country."
 sections:
-  - question: "What kind of architecture firm is Revēl?"
-    answer: "Revēl Architecture is an architecture firm based in Kuwait. We design high-end villas, chalets and commercial buildings, and every design is customised to the people who will use it: how a family lives, hosts and rests, or what a business needs its building to do."
-  - question: "What makes a Revēl design different?"
-    answer: "We design from the inside out. Before layouts or facades, we study how the owners will actually use each space, then plan rooms, light, privacy and circulation around that. The result is a building that fits its owners closely, rather than a standard plan adjusted to fit. [Owner to refine.]"
-  - question: "Where in Kuwait does Revēl work?"
-    answer: "Revēl designs across Kuwait, including Al-Mutlaa, the Abdullah Al-Mubarak area and coastal areas such as Sabah Al-Ahmad Sea City, and works with owners in the new residential cities from the earliest planning stage. [Owner to confirm the list of areas.]"
+  - question: "How does Revēl approach a new project?"
+    answer: "Every project starts with a conversation about how the owners actually live, gather, host, work and rest. Rather than relying on generic layouts or chasing passing visual trends, we focus on how each space is used from morning to night, translating daily routines, privacy needs and natural flow into clear, functional architecture. The same discipline guides our commercial and interior work, where proportion, circulation and usability matter as much as aesthetics."
+  - question: "What is Revēl's design philosophy?"
+    answer: "Our philosophy is grounded in practical clarity and genuine usability: how a building looks should reflect how it functions and how people inhabit it. Rather than relying on excessive decorative elements or repeating common formulas, we start with spatial logic, circulation, proportions and structural soundness."
+  - question: "What makes a Revēl building recognisable?"
+    answer: "Calm, disciplined architecture that feels deliberate rather than forced: spaces where light, privacy and movement come together naturally. Whether a family villa, coastal chalet or commercial project, our work puts lasting livability and quiet confidence ahead of short-lived trends. Just as importantly, our drawings are coordinated so that, followed comprehensively, they translate directly into a building free of mistakes."
+  - question: "How many projects has Revēl designed?"
+    answer: "Since 2020, Revēl has designed more than 40 private homes, villas and chalets, and 6 commercial projects, ranging from commercial buildings to commercial interiors, for owners across Kuwait."
+  - question: "Where in Kuwait has Revēl worked?"
+    answer: "Revēl has designed projects across Kuwait, including Al-Mutlaa, South Abdullah Al-Mubarak, Sabah Al-Ahmad Sea City (Khairan), Sabah Al-Salem, Bayan, Rumaithiya, South Surra, Abu Fatira, Al-Qusour, Jaber Al-Ahmad, Egaila, Sharq, Hawalli, Shuwaikh, Wafra Residential Area and Al-Fintas."
   - question: "Where is Revēl heading?"
-    answer: "Our focus is on high-end, highly customised villas and chalets, and on buildings designed for a clear commercial purpose. We want to be the firm owners call when they want a building made precisely for them. [Owner to confirm or rewrite the firm's direction.]"
+    answer: "Over the next few years, Revēl is focused on bespoke private villas, coastal chalets, mid-sized commercial buildings, and comprehensive residential and commercial interior design across Kuwait. We are particularly keen to work with homeowners in Kuwait's new residential districts, such as South Sabah Al-Ahmad and South Saad Al-Abdullah, from the earliest planning stages, and we aim to take on projects abroad. Alongside this, we keep refining our technical workflow and BIM coordination, so clients benefit from realistic design visualisation, tighter engineering integration and smoother construction."
 principles:
-  - title: "Designed around you"
-    text: "Every plan starts with the people who will use it."
-  - title: "Every space has a purpose"
-    text: "Nothing is there by default; every room earns its place."
-  - title: "Built to be lived in"
-    text: "Practical, durable, buildable decisions."
+  - title: "Shaped around inhabitants"
+    text: "Architecture that is shaped around the people who use it, never around common formulas."
+  - title: "Form driven by function and flow"
+    text: "Spatial logic, circulation, proportion and structure come before decoration."
+  - title: "Drawings built for execution"
+    text: "Highly coordinated drawings delivered for mistake-free execution."
 image: "../../../assets/placeholders/ph-08.jpg"
 imageAlt: "Placeholder image: architectural model in the studio"
 ---
-
-

@@ -36,7 +36,7 @@ function building(w, h, i, [dark, mid, light]) {
   <rect x="${x + bw * 0.1}" y="${g - h * 0.2}" width="${bw * 0.22}" height="${h * 0.14}" fill="${dark}" opacity="0.55"/>
   <rect x="${x + bw * 0.5}" y="${g - h * 0.4}" width="${bw * 0.3}" height="${h * 0.08}" fill="${dark}" opacity="0.45"/>
   <line x1="0" y1="${g}" x2="${w}" y2="${g}" stroke="${light}" stroke-opacity="0.35" stroke-width="2"/>
-  <polygon points="${w * 0.06},${h * 0.1} ${w * 0.1},${h * 0.1} ${w * 0.096},${h * 0.115} ${w * 0.056},${h * 0.115}" fill="#0d6b55"/>`;
+  <polygon points="${w * 0.06},${h * 0.1} ${w * 0.1},${h * 0.1} ${w * 0.096},${h * 0.115} ${w * 0.056},${h * 0.115}" fill="#006859"/>`;
 }
 
 function label(w, h) {

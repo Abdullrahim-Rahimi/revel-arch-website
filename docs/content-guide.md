@@ -20,14 +20,14 @@ The owner questionnaire (`Revel_Website_Content_Questionnaire.docx`, Jira PD-748
 | 2.5 Approach and quote | `pages/*/lead-architect.md` → `sections[1]`, `pullQuote`; `pages/*/home.md` → `pullQuote` |
 | 2.6 Expertise | `pages/*/lead-architect.md` → `knowsAbout` |
 | 2.7 LinkedIn | `src/lib/seo.ts` → `personLd` `sameAs` (pass it in from `lead-architect.astro`) |
-| 2.8 Portrait | replace `src/assets/placeholders/portrait.jpg` reference in `pages/*/lead-architect.md` → `image` |
+| 2.8 Portrait | done (round 1): `src/assets/owner/husain-almousawi.jpg`, replacing the `src/assets/placeholders/portrait.jpg` reference in `pages/*/lead-architect.md` → `image` |
 | 3.1 Services list | `src/content/services/{en,ar}/*.md` (add or remove files in both languages; update `SERVICE_IDS` in `src/content.config.ts`) |
 | 3.2–3.3 Deliverables, timing | `services/*/<id>.md` → `deliverables`, body, FAQ |
 | 3.4 Process | `pages/*/services.md` → `process` |
 | 3.5 Prices | `services/*/<id>.md` → body or a new FAQ entry |
 | 3.6 Client FAQ answers | `services/*/<id>.md` → `faq` (40–60 words each) |
 | 4.x Projects | `src/content/projects/{en,ar}/<slug>.md` (see README → Add a project); delete the four sample projects |
-| 5.1–5.5 Contact details | `src/site.config.ts` → `whatsapp`, `phone`, `email`, `address`, `geo`, `mapsUrl`, `hours`; then remove each from `placeholders`. Hours text: `src/i18n/ui.ts` → `contact.hoursValue` |
+| 5.1–5.5 Contact details | `src/site.config.ts` → `whatsapp`, `phone`, `email`, `address`, `geo`, `mapsUrl`, `hours`; then remove each from `placeholders`. Hours text is generated from `hours` by `src/lib/hours.ts` |
 | 5.6 Social links | `src/site.config.ts` → `instagram`, `sameAs` |
 | 5.7 WhatsApp message | `src/i18n/ui.ts` → `whatsapp.prefill` |
 | 5.8 Reply time | `pages/*/contact.md` → `sections[0]` |

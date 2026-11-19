@@ -1,9 +1,9 @@
 node_modules/
-dist/
+/dist/
 .astro/
 docs/reference/
 .env
 .superpowers/
 .playwright-mcp/
-dist-preview/
-dist-prod/
+/dist-preview/
+/dist-prod/

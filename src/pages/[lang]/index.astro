@@ -6,6 +6,7 @@ import WhatsAppButton from '../../components/WhatsAppButton.astro';
 import Ph from '../../components/Ph.astro';
 import { LANGS, localizedPath, t, type Lang } from '../../i18n/utils';
 import { getPage, getProjects, getServices, slugOf } from '../../lib/content';
+import { siteConfig } from '../../site.config';
 
 export function getStaticPaths() {
   return LANGS.map((lang) => ({ params: { lang } }));
@@ -21,7 +22,7 @@ const d = home.data;
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-text reveal">
-        <span class="eyebrow">{lang === 'ar' ? 'ريفيل للعمارة · الكويت' : 'Revēl Architecture · Kuwait'}</span>
+        <span class="eyebrow">{siteConfig.name[lang]} · {lang === 'ar' ? 'الكويت' : 'Kuwait'}</span>
         <h1>{d.heading}</h1>
         <p class="lead">{d.intro}</p>
         <div class="actions">
@@ -30,7 +31,7 @@ const d = home.data;
         </div>
       </div>
       {d.image && (
-        <Ph as="div" when={d.placeholder} class="hero-media">
+        <Ph as="div" when={d.imagePlaceholder ?? d.placeholder} class="hero-media">
           <Picture src={d.image} alt={d.imageAlt ?? ''} formats={['avif', 'webp']} widths={[640, 1024, 1600]} sizes="(min-width: 64rem) 55vw, 100vw" loading="eager" fetchpriority="high" />
         </Ph>
       )}
@@ -83,7 +84,7 @@ const d = home.data;
   <section class="section">
     <div class="container architect">
       {architect.data.image && (
-        <Ph as="div" when={architect.data.placeholder} class="portrait">
+        <Ph as="div" when={architect.data.imagePlaceholder ?? architect.data.placeholder} class="portrait">
           <Picture src={architect.data.image} alt={architect.data.imageAlt ?? ''} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 52rem) 30vw, 80vw" loading="lazy" />
         </Ph>
       )}

@@ -18,7 +18,7 @@ export function organizationLd(lang: Lang, cfg: SiteConfig = siteConfig): Record
     '@id': ORG_ID,
     name: cfg.name[lang],
     alternateName: cfg.name[otherLang(lang)],
-    legalName: cfg.legalName,
+    foundingDate: String(cfg.foundingYear),
     url: `${cfg.url}/${lang}/`,
     logo: `${cfg.url}/og-default.jpg`,
     image: `${cfg.url}/og-default.jpg`,
@@ -30,7 +30,7 @@ export function organizationLd(lang: Lang, cfg: SiteConfig = siteConfig): Record
       '@type': 'PostalAddress',
       addressLocality: addr.locality,
       addressCountry: 'KW',
-      ...(has(cfg, 'address') ? { streetAddress: addr.street } : {}),
+      ...(has(cfg, 'address') ? { streetAddress: `${addr.street}, ${addr.area}`, postalCode: addr.postalCode } : {}),
     },
     areaServed: { '@type': 'Country', name: lang === 'ar' ? 'الكويت' : 'Kuwait' },
     knowsLanguage: ['en', 'ar'],
@@ -49,22 +49,25 @@ export function organizationLd(lang: Lang, cfg: SiteConfig = siteConfig): Record
 
 export function personLd(
   lang: Lang,
-  extra: { knowsAbout?: string[]; image?: string; description?: string; sameAs?: string[] } = {},
+  extra: { knowsAbout?: string[]; image?: string; description?: string } = {},
   cfg: SiteConfig = siteConfig,
 ): Record<string, any> {
+  // He goes by "Husain"; "Sayed" is legally part of his name, kept for search matching only.
   return {
     '@context': CTX,
     '@type': 'Person',
     '@id': PERSON_ID,
     name: lang === 'ar' ? 'حسين الموسوي' : 'Husain Almousawi',
+    alternateName: lang === 'ar' ? 'السيد حسين الموسوي' : 'Sayed Husain Almousawi',
     honorificPrefix: lang === 'ar' ? 'السيد' : 'Sayed',
-    jobTitle: lang === 'ar' ? 'المؤسس والمعماري الرئيسي' : 'Founder & Lead Architect',
+    jobTitle: lang === 'ar' ? 'المؤسس والمعماري الرئيسي' : 'Founder & Principal Architect',
     worksFor: { '@id': ORG_ID },
     url: `${cfg.url}/${lang}/lead-architect/`,
+    alumniOf: { '@type': 'CollegeOrUniversity', name: cfg.leadArchitect.alumniOf },
+    sameAs: [cfg.leadArchitect.linkedin],
     ...(extra.description ? { description: extra.description } : {}),
     ...(extra.knowsAbout ? { knowsAbout: extra.knowsAbout } : {}),
     ...(extra.image ? { image: extra.image } : {}),
-    ...(extra.sameAs?.length ? { sameAs: extra.sameAs } : {}),
   };
 }
 

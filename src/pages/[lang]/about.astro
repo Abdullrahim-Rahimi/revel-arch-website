@@ -28,7 +28,7 @@ const crumbs = [{ name: t(lang, 'nav.home'), path: '/' }, { name: t(lang, 'nav.a
     </header>
 
     {d.image && (
-      <Ph as="div" class="wide-media" when={d.placeholder}>
+      <Ph as="div" class="wide-media" when={d.imagePlaceholder ?? d.placeholder}>
         <Picture src={d.image} alt={d.imageAlt ?? ''} formats={['avif', 'webp']} widths={[640, 1200, 1800]} sizes="100vw" loading="eager" />
       </Ph>
     )}

@@ -45,7 +45,7 @@ const addr = siteConfig.address[lang];
         <div>
           <dt>{t(lang, 'contact.address')}</dt>
           <dd>
-            <address><Ph when={isPlaceholder('address')} name="address">{addr.street}, {addr.locality}, {addr.country}</Ph></address>
+            <address><Ph when={isPlaceholder('address')} name="address">{[addr.street, addr.area, `${addr.locality} ${addr.postalCode}`, addr.country].join(lang === 'ar' ? '، ' : ', ')}</Ph></address>
             <Ph when={isPlaceholder('map')} name="map"><a href={siteConfig.mapsUrl} target="_blank" rel="noopener">{t(lang, 'contact.directions')} <span class="flip" aria-hidden="true">→</span></a></Ph>
             {isPlaceholder('geo') && <span data-placeholder="geo" hidden></span>}
           </dd>
@@ -55,8 +55,12 @@ const addr = siteConfig.address[lang];
           <dd data-hours><Ph when={isPlaceholder('hours')} name="hours">{formatHours(lang, siteConfig.hours)}</Ph></dd>
         </div>
         <div>
-          <dt>{t(lang, 'contact.instagram')}</dt>
-          <dd><a href={siteConfig.instagram} target="_blank" rel="me noopener"><bdi dir="ltr">@rvl.arch</bdi></a></dd>
+          <dt>{t(lang, 'contact.social')}</dt>
+          <dd class="social">
+            <a href={siteConfig.instagram} target="_blank" rel="me noopener">Instagram <bdi dir="ltr">@rvl.arch</bdi></a>
+            <a href={siteConfig.linkedin} target="_blank" rel="me noopener">LinkedIn</a>
+            <a href={siteConfig.tiktok} target="_blank" rel="me noopener">TikTok <bdi dir="ltr">@rvl.arch</bdi></a>
+          </dd>
         </div>
       </dl>
     </div>
@@ -77,6 +81,7 @@ const addr = siteConfig.address[lang];
   :global(:lang(ar)) .details dt { letter-spacing: 0; text-transform: none; }
   .details dd { margin: 0; font-size: var(--step-1); font-weight: 300; }
   .details dd a { color: var(--text); }
+  .details .social { display: grid; gap: 0.25rem; font-size: var(--step-0); }
   .details address { font-style: normal; margin-block-end: 0.35rem; }
   .details address + :global(*) a, .details address + a { font-size: var(--step--1); color: var(--accent-text); }
 </style>
